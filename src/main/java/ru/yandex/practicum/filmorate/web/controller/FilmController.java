@@ -11,8 +11,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -22,26 +20,29 @@ import java.util.List;
 public class FilmController {
     private final FilmService filmService;
 
+
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
+
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody @NotNull Film film) {
         log.info("Получен запрос на добавление фильма");
         try {
             return filmService.saveFilm(film);
-        }
-        catch (ResourceAlreadyExistException e) {
+        } catch (ResourceAlreadyExistException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody @NotNull Film film) {
         log.info("Получен запрос на обновление фильма");
         return filmService.changeFilm(film);
     }
+
 
     @GetMapping
     public List<Film> getAllFilm() {

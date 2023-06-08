@@ -6,15 +6,18 @@ import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
+
 @Service
 public class UserService {
     private HashMap<Integer, User> users;
     private int count;
 
+
     public UserService() {
         this.users = new HashMap<>();
         count = 1;
     }
+
 
     public User saveUser(User user) {
         if (Objects.isNull(user.getName()) || user.getName().isBlank()) {
@@ -31,6 +34,7 @@ public class UserService {
         return user;
     }
 
+
     public User changeUser(User user) {
         Optional<User> userOpt = Optional.ofNullable(users.get(user.getId()));
         if (userOpt.isEmpty()) {
@@ -40,6 +44,7 @@ public class UserService {
         BeanUtils.copyProperties(user, userDb, "id");
         return users.put(user.getId(), userDb);
     }
+
 
     public List<User> getAllUser() {
         if (users.isEmpty()) {

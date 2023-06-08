@@ -25,22 +25,24 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PostMapping
     public User createUser(@Valid @RequestBody @NotNull User user) {
         log.info("Получен запрос на добавление пользователя");
         try {
             return userService.saveUser(user);
-        }
-        catch (ResourceAlreadyExistException e){
+        } catch (ResourceAlreadyExistException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping
     public User updateUser(@Valid @RequestBody @NotNull User user) {
         log.info("Получен запрос на обновление пользователя");
         return userService.changeUser(user);
     }
+
 
     @GetMapping
     public List<User> getAllUsers() {

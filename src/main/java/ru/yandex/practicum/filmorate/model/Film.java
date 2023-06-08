@@ -1,16 +1,19 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.web.valid.DateValid;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Objects;
+
 
 @Data
+@Builder(toBuilder = true)
+@EqualsAndHashCode(of = {"name", "description", "releaseDate"})
 public class Film {
     private int id;
     @NotBlank(message = "Не может быть пустым")
@@ -19,22 +22,7 @@ public class Film {
     private String description;
     @DateValid
     private LocalDate releaseDate;
-    @Positive()
+    @Positive(message = "Продолжительность не может быть отрицательной")
     private int duration;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Film)) return false;
-        Film film = (Film) o;
-        return getDuration() == film.getDuration() && getName()
-                .equals(film.getName()) && getDescription().equals(film.getDescription()) && getReleaseDate()
-                .equals(film.getReleaseDate());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getReleaseDate(), getDuration());
-    }
 }
 
