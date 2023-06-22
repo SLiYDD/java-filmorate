@@ -1,25 +1,55 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.List;
+import java.util.*;
 
-public interface UserService {
-    User saveUser(User user);
+@Service
+public class UserService {
+    private HashMap<Integer, User> users;
+    private int count;
 
-    User updateUser(User user);
 
-    User findUserById(int id);
+    public UserService() {
+        this.users = new HashMap<>();
+        count = 1;
+    }
 
-    List<User> getAllUser();
 
-    void deleteUser(int id);
+    public User saveUser(User user) {
+        if (Objects.isNull(user.getName()) || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+        if (users.containsValue(user)) {
+            for (User value : users.values()) {
+                if (value.equals(user)) return value;
+            }
+        }
+        user.setId(count);
+        users.put(count, user);
+        count++;
+        return user;
+    }
 
-    void addFriend(int userId, int friendId);
 
-    void deleteFriend(int userId, int friendId);
+    public User changeUser(User user) {
+        Optional<User> userOpt = Optional.ofNullable(users.get(user.getId()));
+        if (userOpt.isEmpty()) {
+            throw new NotFoundException("This user does not exist");
+        }
+        User userDb = userOpt.get();
+        BeanUtils.copyProperties(user, userDb, "id");
+        return users.put(user.getId(), userDb);
+    }
 
-    List<User> findAllFriends(int id);
 
-    List<User> findCommonFriends(int id, int otherId);
+    public List<User> getAllUser() {
+        if (users.isEmpty()) {
+            throw new NotFoundException("The list of users is empty");
+        }
+        return new ArrayList<>(users.values());
+    }
 }
