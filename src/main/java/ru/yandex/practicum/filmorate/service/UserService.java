@@ -13,7 +13,7 @@ public interface UserService {
 
     List<User> getAllUser();
 
-    void deleteUser(int id);
+    void deleteUser(int userId);
 
     void addFriend(int userId, int friendId);
 
