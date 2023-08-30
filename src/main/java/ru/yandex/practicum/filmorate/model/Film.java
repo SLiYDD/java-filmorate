@@ -26,5 +26,11 @@ public class Film {
     @Positive(message = "Продолжительность не может быть отрицательной")
     private int duration;
     private Set<Integer> likes;
+    private Mpa mpa;
+    private Set<Genre> genres;
+
+    public void addGenre(Genre genre) {
+        genres.add(genre);
+    }
 }
 
